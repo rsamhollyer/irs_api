@@ -8,26 +8,26 @@ generator client {
 }
 
 model TaxForm {
-  id            Int          @id @default(autoincrement())
-  product       String       @db.VarChar(500)
-  title         String       @db.VarChar(2000)
-  revision_date String       @db.VarChar(12)
-  url           String       @db.VarChar(2000)
-  instruction   Instruction?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  id             Int         @id @default(autoincrement())
+  product        String      @db.VarChar(500)
+  title          String      @db.VarChar(2000)
+  revision_date  String      @db.VarChar(12)
+  url            String      @db.VarChar(2000)
+  instruction    Instruction @relation(fields: [instruction_id], references: [id])
+  instruction_id Int
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 
 }
 
 model Instruction {
-  id            Int      @id @default(autoincrement())
-  product       String   @db.VarChar(500)
-  title         String   @db.VarChar(2000)
-  revision_date String   @db.VarChar(12)
-  url           String   @db.VarChar(2000)
-  tax_form      TaxForm  @relation(fields: [tax_form_id], references: [id])
-  tax_form_id   Int
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id            Int       @id @default(autoincrement())
+  product       String    @db.VarChar(500)
+  title         String    @db.VarChar(2000)
+  revision_date String    @db.VarChar(12)
+  url           String    @db.VarChar(2000)
+  tax_form      TaxForm[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
 }
