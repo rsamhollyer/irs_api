@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const cheerio = require('cheerio');
 const axios = require('axios');
 

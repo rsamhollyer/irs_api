@@ -9,10 +9,10 @@ generator client {
 
 model TaxForm {
   id             Int         @id @default(autoincrement())
-  product        String      @db.VarChar(500)
-  title          String      @db.VarChar(2000)
+  product        String      @db.VarChar(128)
+  title          String      @db.VarChar(256)
   revision_date  String      @db.VarChar(12)
-  url            String      @db.VarChar(2000)
+  url            String      @db.VarChar(256)
   instruction    Instruction @relation(fields: [instruction_id], references: [id])
   instruction_id Int
   createdAt      DateTime    @default(now())
@@ -22,10 +22,10 @@ model TaxForm {
 
 model Instruction {
   id            Int       @id @default(autoincrement())
-  product       String    @db.VarChar(500)
-  title         String    @db.VarChar(2000)
+  product       String    @db.VarChar(128)
+  title         String    @db.VarChar(256)
   revision_date String    @db.VarChar(12)
-  url           String    @db.VarChar(2000)
+  url           String    @db.VarChar(256)
   tax_form      TaxForm[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
