@@ -56,8 +56,8 @@ async function getAllPages() {
     const [forms, instructions, isNextHref] = await searializeForms(data);
 
     loopStop = isNextHref;
-    formsArray = [...formsArray, ...forms];
-    instructionsArray = [...instructionsArray, ...instructions];
+    formsArray = formsArray.concat(forms);
+    instructionsArray = instructionsArray.concat(instructions);
     results += 200;
     console.log(formsArray.length);
     console.log(instructionsArray.length);
