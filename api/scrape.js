@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 
-// indexOfFirstRow=0
 const cheerio = require('cheerio');
 const irsAxios = require('./instance');
 
