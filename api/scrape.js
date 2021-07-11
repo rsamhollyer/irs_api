@@ -1,13 +1,29 @@
 /* eslint-disable camelcase */
+
+// indexOfFirstRow=0
 const cheerio = require('cheerio');
-const axios = require('axios');
+const irsAxios = require('./instance');
 
-function searializeForms(dataObject) {
+async function getPage(results = 0) {
+  try {
+    const { data } = await irsAxios
+      .get('/', { params: { indexOfFirstRow: results } })
+      .catch(error => {
+        throw new Error(error);
+      });
+    return data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+async function searializeForms(dataObject) {
+  const forms = [];
+  const instructions = [];
   const $ = cheerio.load(dataObject);
-  const formArray = [];
-  const instructionArray = [];
-
-  $('.picklist-dataTable')
+  const isNextHref = !!$('a:last-child', '.paginationBottom').attr('href');
+  await $('.picklist-dataTable')
     .find('tr')
     .each((i, element) => {
       if ($(element).attr('class') !== undefined) {
@@ -18,34 +34,34 @@ function searializeForms(dataObject) {
           .text()
           .trim();
         const url = $(element).find('a').attr('href');
+
         if (!product.startsWith('Inst')) {
-          formArray[i] = { product, title, revision_date, url };
+          forms.push({ product, title, revision_date, url });
         } else {
-          instructionArray.push({ product, title, revision_date, url });
+          instructions.push({ product, title, revision_date, url });
         }
       }
     });
-  console.log(formArray, instructionArray);
+  return [forms, instructions, isNextHref];
 }
 
-async function getData(
-  params = {
-    sortColumn: 'sortOrder',
-    indexOfFirstRow: 0,
-    value: '',
-    criteria: '',
-    resultsPerPage: 200,
-    isDescending: false,
-  }
-) {
-  const url = `https://apps.irs.gov/app/picklist/list/priorFormPublication.html`;
+async function getAllPages() {
+  let results = 0;
+  let loopStop = true;
+  let formsArray = [];
+  let instructionsArray = [];
 
-  try {
-    const { data } = await axios.get(url, { params });
+  while (loopStop) {
+    const data = await getPage(results);
+    const [forms, instructions, isNextHref] = await searializeForms(data);
 
-    searializeForms(data);
-  } catch (error) {
-    console.log(error);
+    loopStop = isNextHref;
+    formsArray = [...formsArray, ...forms];
+    instructionsArray = [...instructionsArray, ...instructions];
+    results += 200;
+    console.log(formsArray.length);
+    console.log(instructionsArray.length);
   }
 }
-getData();
+
+getAllPages();
