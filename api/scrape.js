@@ -1,7 +1,8 @@
 /* eslint-disable camelcase */
 
 const cheerio = require('cheerio');
-const irsAxios = require('./instance');
+const irsAxios = require('./instance.js');
+const prisma = require('../config/client.js');
 
 async function getPage(results = 0) {
   try {
@@ -58,9 +59,31 @@ async function getAllPages() {
     formsArray = formsArray.concat(forms);
     instructionsArray = instructionsArray.concat(instructions);
     results += 200;
-    console.log(formsArray.length);
-    console.log(instructionsArray.length);
   }
+  return [formsArray, instructionsArray];
 }
 
-getAllPages();
+async function bulkInsertData() {
+  const [formsArray, instructionsArray] = await getAllPages();
+  try {
+    await prisma.taxForm
+      .createMany({ data: formsArray, skipDuplicates: true })
+      .catch(error => {
+        throw new Error(error);
+      });
+    await prisma.instruction
+      .createMany({ data: instructionsArray, skipDuplicates: true })
+      .catch(error => {
+        throw new Error(error);
+      });
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+bulkInsertData()
+  .catch(error => {
+    console.log(error);
+    process.exit(1);
+  })
+  .finally(prisma.$disconnect());
