@@ -86,4 +86,8 @@ bulkInsertData()
     console.log(error);
     process.exit(1);
   })
-  .finally(prisma.$disconnect());
+  .finally(() => {
+    console.log('😈 ALL DONE!');
+    prisma.$disconnect();
+    process.exit(1);
+  });
