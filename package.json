@@ -35,10 +35,10 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "nodemon": "^2.0.9",
     "prettier": "^2.3.2",
-    "prisma": "^2.26.0"
+    "prisma": "^2.27.0"
   },
   "dependencies": {
-    "@prisma/client": "^2.26.0",
+    "@prisma/client": "^2.27.0",
     "axios": "^0.21.1",
     "axios-cookiejar-support": "^1.0.1",
     "cheerio": "^1.0.0-rc.10",
