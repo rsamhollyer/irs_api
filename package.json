@@ -23,10 +23,10 @@
   "description": "",
   "devDependencies": {
     "nodemon": "^2.0.9",
-    "prisma": "^2.27.0"
+    "prisma": "^2.29.1"
   },
   "dependencies": {
-    "@prisma/client": "^2.27.0",
+    "@prisma/client": "^2.29.1",
     "axios": "^0.21.1",
     "axios-cookiejar-support": "^1.0.1",
     "cheerio": "^1.0.0-rc.10",

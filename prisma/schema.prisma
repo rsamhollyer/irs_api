@@ -1,10 +1,10 @@
-datasource db {
-  provider = "postgresql"
-  url      = env("DB_URL")
-}
-
 generator client {
   provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model TaxForm {
@@ -13,11 +13,10 @@ model TaxForm {
   title          String       @db.VarChar(256)
   revision_date  String       @db.VarChar(12)
   url            String       @unique @db.VarChar(256)
-  instruction    Instruction? @relation(fields: [instruction_id], references: [id])
   instruction_id Int?
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
-
+  instruction    Instruction? @relation(fields: [instruction_id], references: [id])
 }
 
 model Instruction {
@@ -26,8 +25,7 @@ model Instruction {
   title         String    @db.VarChar(256)
   revision_date String    @db.VarChar(12)
   url           String    @unique @db.VarChar(256)
-  tax_form      TaxForm[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-
+  tax_form      TaxForm[]
 }
